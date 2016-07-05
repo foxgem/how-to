@@ -1,0 +1,67 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven {
+            url = 'http://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+version = '0.1'
+
+if (!JavaVersion.current().java8Compatible) {
+    throw new IllegalStateException('''Please install Java 8!'''.stripMargin())
+}
+
+repositories {
+    jcenter()
+    mavenLocal()
+    maven {
+        url = 'http://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    compile "io.vertx:vertx-core:3.2.1"
+    compile "org.codehaus.groovy:groovy-all:2.4.5"
+    compile "io.vertx:vertx-lang-groovy:3.2.1"
+    compile('org.apache.kafka:kafka-clients:0.9.0.0') {
+        exclude group: 'com.sun.jdmk', module: 'jmxtools'
+        exclude group: 'com.sun.jmx', module: 'jmxri'
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        exclude group: 'log4j', module: 'log4j'
+    }
+
+    compile fileTree(dir: "lib", includes: ['*.jar'])
+
+    runtime 'org.slf4j:slf4j-log4j12:1.6.2'
+    runtime('org.apache.kafka:kafka-log4j-appender:0.9.0.0') {
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        exclude group: 'log4j', module: 'log4j'
+    }
+
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testRuntime 'cglib:cglib-nodep:3.1'
+    testRuntime 'org.objenesis:objenesis:2.1'
+}
+
+shadowJar {
+    classifier = 'fat'
+    manifest {
+        attributes 'Main-Class': 'io.vertx.core.Launcher'
+        attributes 'Main-Verticle': 'groovy:foxgem.MainVerticle'
+    }
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+}
