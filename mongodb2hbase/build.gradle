@@ -1,0 +1,38 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "http://218.75.124.3:8081/repository/maven-public/" }
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+repositories {
+    mavenLocal()
+    maven { url "http://218.75.124.3:8081/repository/maven-public/" }
+    jcenter()
+}
+
+dependencies {
+    compile "org.apache.hbase:hbase-client:1.2.1"
+    compile "org.mongodb:mongodb-driver:3.2.2"
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'com.shifudao.Mongo2HBase'
+    }
+}
+
+configurations {
+    /* We don't want the test dependency in our shadowJar */
+    runtime.exclude module: 'junit'
+}
