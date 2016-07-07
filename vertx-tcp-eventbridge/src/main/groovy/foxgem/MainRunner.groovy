@@ -1,9 +1,8 @@
 package foxgem
 
 import io.vertx.groovy.core.Vertx
-import io.vertx.lang.groovy.GroovyVerticle
 
-class MainRunner extends GroovyVerticle {
+class MainRunner {
 
     public static void main(String[] args) {
         Vertx vertx1 = Vertx.vertx()
