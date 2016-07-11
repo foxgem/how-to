@@ -1,0 +1,47 @@
+ buildscript {
+     repositories {
+          mavenLocal()
+         jcenter()
+         mavenCentral()
+          maven {
+              url = 'http://oss.sonatype.org/content/repositories/snapshots/'
+          }
+     }
+     dependencies {
+         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+     }
+ }
+
+ apply plugin: 'java'
+ apply plugin: 'com.github.johnrengelman.shadow'
+
+ version = '0.1'
+
+ if (!JavaVersion.current().java8Compatible) {
+     throw new IllegalStateException('''Please install Java 8!'''.stripMargin())
+ }
+
+repositories {
+     jcenter()
+     mavenLocal()
+     maven {
+         url = 'http://oss.sonatype.org/content/repositories/snapshots/'
+     }
+    mavenCentral()
+}
+
+dependencies {
+     compile 'io.vertx:vertx-core:3.3.0'
+     compile 'io.vertx:vertx-circuit-breaker:3.3.0'
+}
+
+ shadowJar {
+     classifier = 'fat'
+     manifest {
+         attributes 'Main-Class': 'io.vertx.core.Launcher'
+         attributes 'Main-Verticle': 'foxgem.MainVerticle'
+     }
+     mergeServiceFiles {
+         include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+     }
+ }
