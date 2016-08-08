@@ -1,24 +1,8 @@
-Groovy Application project template
-------------------------------------
+To run this example: gradle run.
 
-You have just created a basic Groovy application. There is a standard project
-structure for source code and tests.
+NOTE:
 
-In this project you get:
-
-* A Gradle build file
-* A standard project structure:
-
-    <proj>
-      |
-      +- src
-          |
-          +- main
-          |     |
-          |     +- groovy
-          |
-          +- test
-          |   |
-          |   +- groovy
-
-          |
+1. host MUST BE configured if ZK Server is not "localhost"
+2. there is no space between zk server list. eg:
+   - 173.16.250.10:2181,173.16.250.13:2181,173.16.250.14:2181 (right)
+   - 173.16.250.10:2181, 173.16.250.13:2181, 173.16.250.14:2181 (wrong)
