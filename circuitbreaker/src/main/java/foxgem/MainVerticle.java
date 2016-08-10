@@ -31,6 +31,7 @@ public class MainVerticle extends AbstractVerticle {
                         .setMaxFailures(3)
                         .setTimeout(2000));
         cbSucceed.execute(future -> {
+            // MUST! Otherwise this action will not be considered as completed!
             future.complete(ms.succeed());
         }).setHandler(result -> {
             if (result.succeeded()) {

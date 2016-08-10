@@ -1,0 +1,18 @@
+1. Add api based on vert.x web
+
+    curl -i -X POST \
+      --url http://localhost:8001/apis/ \
+      --data 'name=public' \
+      --data 'upstream_url=http://localhost:8080/' \
+      --data 'request_path=/public'
+
+    curl -i -X POST \
+          --url http://localhost:8001/apis/ \
+          --data 'name=private' \
+          --data 'upstream_url=http://localhost:8080/' \
+          --data 'request_path=/private'
+
+
+2. verify
+
+    curl http://localhost:8000/public

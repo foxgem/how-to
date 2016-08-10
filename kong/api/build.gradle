@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven {
+            url = 'http://oss.sonatype.org/content/repositories/snapshots/'
+        }
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+version = '0.1'
+
+if (!JavaVersion.current().java8Compatible) {
+    throw new IllegalStateException('''Please install Java 8!'''.stripMargin())
+}
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs += ["src/main/java"]
+
+repositories {
+    jcenter()
+    mavenLocal()
+    maven {
+        url = 'http://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:2.4.5"
+
+    compile "io.vertx:vertx-core:3.3.2"
+    compile 'io.vertx:vertx-web:3.3.2'
+    compile 'io.vertx:vertx-auth-jwt:3.3.2'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+}
+
+shadowJar {
+    classifier = 'fat'
+    manifest {
+        attributes 'Main-Class': 'foxgem.MainRunner'
+    }
+}
