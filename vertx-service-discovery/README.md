@@ -1,7 +1,7 @@
 # Vertx Service Discovery Example
 
-compile: gradle shadowJar
-execute: java -jar build/libs/vsd-0.0.1-fat.jar
+- compile: gradle shadowJar
+- execute: java -jar build/libs/vsd-0.0.1-fat.jar
 
 Note:
 
