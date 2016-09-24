@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "http://218.75.124.3:8081/repository/maven-public/" }
+        jcenter()
+        maven { url 'http://oss.sonatype.org/content/repositories/snapshots/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+if (!JavaVersion.current().java8Compatible) {
+    throw new IllegalStateException('''Please install Java 8!'''.stripMargin())
+}
+
+repositories {
+    mavenLocal()
+    maven { url "http://218.75.124.3:8081/repository/maven-public/" }
+    jcenter()
+    maven { url = 'http://oss.sonatype.org/content/repositories/snapshots/' }
+    mavenCentral()
+}
+
+dependencies {
+    compile "io.vertx:vertx-core:${VERTX_VER}"
+    compile "io.vertx:vertx-web:${VERTX_VER}"
+    compile "io.vertx:vertx-ignite:${VERTX_VER}"
+    compile "io.vertx:vertx-service-discovery:${VERTX_VER}"
+}
+
+version = '0.0.1'
+
+shadowJar {
+    classifier = 'fat'
+    baseName = 'vsd'
+    manifest {
+        attributes 'Main-Class': 'foxgem.MainRunner'
+    }
+}
