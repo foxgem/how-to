@@ -1,0 +1,10 @@
+apply plugin: "application"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.apache.spark:spark-core_2.10:2.1.0'
+    compile 'org.apache.spark:spark-streaming_2.10:2.1.0'
+}
