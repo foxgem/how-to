@@ -2,12 +2,12 @@ package foxgem;
 
 import org.hbase.async.*;
 
-public class HBaseClientSamples {
+public class AsyncHBaseClientSamples {
 
     HBaseClient client;
 
     public static void main(String[] args) throws Exception {
-        HBaseClientSamples samples = new HBaseClientSamples();
+        AsyncHBaseClientSamples samples = new AsyncHBaseClientSamples();
         samples.compareAndSet("test", "row-1", "cf", "c3", new byte[] {1}, Bytes.fromLong(1));
         samples.hBaseClient().shutdown();
     }

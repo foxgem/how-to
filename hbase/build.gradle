@@ -1,0 +1,13 @@
+apply plugin: "java"
+apply plugin: "application"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+//    compile 'org.hbase:asynchbase:1.7.2'
+    compile ('org.apache.hbase:hbase-client:1.2.4')
+}
+
+mainClassName = 'foxgem.HBaseClientExamples'
