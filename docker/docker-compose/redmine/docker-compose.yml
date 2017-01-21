@@ -1,0 +1,47 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.6
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=redmine
+      - MYSQL_USER=redmine
+      - MYSQL_PASSWORD=redmine
+    volumes:
+      - ./mysql_data:/var/lib/mysql/
+    command: 
+      - "--character-set-server=utf8"
+      - "--collation-server=utf8_unicode_ci"
+    logging:
+      options:
+        max-size: "100k"
+        max-file: "2"
+
+  redmine:
+    image: redmine:passenger
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      REDMINE_DB_MYSQL: db
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: redmine
+      REDMINE_DB_ENCODING: utf8
+    volumes:
+      - ./redmine_storage/files/:/usr/src/redmine/files/
+      - ./redmine_storage/plugins/:/usr/src/redmine/plugins/
+      - ./redmine_storage/public/themes/:/usr/src/redmine/public/themes/
+      - ./redmine_storage/config/configuration.yml:/usr/src/redmine/config/configuration.yml
+    command:
+      - /bin/sh
+      - -c
+      - |
+          bundle config mirror.https://rubygems.org https://gems.ruby-china.org
+          /docker-entrypoint.sh passenger start
+    logging:
+      options:
+        max-size: "100k"
+        max-file: "2"

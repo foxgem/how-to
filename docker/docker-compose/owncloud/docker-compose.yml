@@ -1,0 +1,33 @@
+version: '2'
+services:
+  db:
+    image: mysql:5.6
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=owncloud
+      - MYSQL_USER=owncloud
+      - MYSQL_PASSWORD=owncloud
+    volumes:
+      - ./mysql_data:/var/lib/mysql/
+    command: 
+      - "--character-set-server=utf8"
+      - "--collation-server=utf8_unicode_ci"
+    logging:
+      options:
+        max-size: "100k"
+        max-file: "2"
+
+  owncloud:
+    image: owncloud
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./owncloud_storage:/var/www/html
+    logging:
+      options:
+        max-size: "100k"
+        max-file: "2"
