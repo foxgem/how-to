@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+  sonar:
+    image: sonarqube:lts-alpine
+    ports:
+      - '9000:9000'
+      - '9092:9092'
+    environment:
+      SONARQUBE_JDBC_USERNAME: sonar
+      SONARQUBE_JDBC_PASSWORD: sonar
+      SONARQUBE_JDBC_URL:      jdbc:postgresql://postgres/sonar
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:9.6-alpine
+    environment:
+      POSTGRES_PASSWORD: root
+    volumes:
+      - ./pg_data/:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
