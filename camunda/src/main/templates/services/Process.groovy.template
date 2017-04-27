@@ -1,0 +1,22 @@
+package ${packageName}
+
+import org.camunda.bpm.engine.RuntimeService
+import org.camunda.bpm.engine.runtime.Execution
+
+import java.util.logging.Logger
+
+class ${simpleName}Service {
+    
+    // Use java.util.logging in order to see something in vanilla tomcat catalina.out
+    static Logger logger = Logger.getLogger(${simpleName}Service.name)
+    
+    RuntimeService runtimeService
+
+    def serviceMethod(Execution execution) {
+        println("\${${simpleName}Service.class.simpleName} called from Camunda BPM ProcessInstance (id='\${execution.processInstanceId}').")
+        runtimeService.getVariables(execution.processInstanceId).each {
+            logger.info("- Process Variable '\${it.key}' = \${it.value} (\${it.value?.class})")
+        }
+    }
+    
+}
