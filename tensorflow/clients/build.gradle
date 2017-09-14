@@ -1,0 +1,65 @@
+apply plugin: 'groovy'
+apply plugin: 'com.google.protobuf'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.0'
+    }
+}
+
+if (!JavaVersion.current().java8Compatible) {
+    throw new IllegalStateException('''Please install Java 8!'''.stripMargin())
+}
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs += ["src/main/java"]
+
+repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:${GROOVY_VER}"
+    compile "io.vertx:vertx-core:${VERTX_VER}"
+    compile "io.vertx:vertx-grpc:${VERTX_VER}"
+    compile "ch.qos.logback:logback-classic:${LOGBACK_VER}"
+}
+
+version = '0.1'
+
+shadowJar {
+    classifier = 'fat'
+    baseName = "${APP_NAME}"
+    manifest {
+        attributes 'Main-Class': 'foxgem.Launcher'
+    }
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+}
+
+protobuf {
+    generatedFilesBaseDir = 'src/main/generated'
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.2.0'
+    }
+    plugins {
+        grpc {
+            artifact = "io.vertx:protoc-gen-grpc-java:${VERTX_GRPC_JAVA}"
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc
+        }
+    }
+}

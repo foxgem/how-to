@@ -2,3 +2,6 @@ build
 *.iml
 .idea
 .gradle
+tensorflow/model
+tensorflow/log_simple_stats
+*.log
