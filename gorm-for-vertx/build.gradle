@@ -1,0 +1,28 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+repositories {
+    mavenLocal()
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    jcenter()
+}
+
+dependencies {
+    compile "io.vertx:vertx-core:${vertxVersion}"
+    compile "io.vertx:vertx-web:${vertxVersion}"
+    compile "org.grails:grails-datastore-gorm-hibernate5:$gormVersion"
+    runtime "com.h2database:h2:1.4.192"
+    runtime "org.apache.tomcat:tomcat-jdbc:8.5.0"
+    runtime "org.apache.tomcat.embed:tomcat-embed-logging-log4j:8.5.0"
+    runtime "org.slf4j:slf4j-api:1.7.10"
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs += ["src/main/java"]
+
+mainClassName = 'io.vertx.core.Launcher'
+
+run.doFirst {
+    args 'run', 'com.shifudao.example.Gorm4Vertx'
+}
